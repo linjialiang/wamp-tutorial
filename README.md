@@ -22,3 +22,68 @@
 | [phpmyadmin](https://files.phpmyadmin.net/phpMyAdmin/5.1.1/phpMyAdmin-5.1.1-all-languages.zip) | MySQL 操作工具 |
 | [adminer](https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php)         | 数据库操作工具 |
 | VisualCppRedist_AIO_x86_x64_v52.exe                                                            | vc 运行库合集  |
+
+## 目录结构
+
+```text
+================================================================================
+WAMP 开发环境目录
+================================================================================
+├─ base                                     wamp核心目录
+|   ├─ httpd                                 Web服务器
+|   |  ├─ bin                                阿帕奇可执行程序目录
+|   |  ├─ conf                               配置
+|   |  |  ├─ httpd.conf                      阿帕奇主配置文件
+|   |  |  └─ ...
+|   |  └─ ...
+|   |
+|   ├─ MariaDB                               MariaDB 10.6版本
+|   |  ├─ bin                                MariaDB 可执行程序目录
+|   |  ├─ my.ini                             MariaDB 配置文件
+|   |  └─ ...
+|   |
+|   ├─ php                                   php 8.0版本
+|   |  ├─ ext                                模块目录
+|   |  ├─ php.ini                            php主配置文件
+|   |  └─ ...
+|   |
+|   ├─ conf                                  公用配置文件目录
+|   |   ├─ key                               本地自签署证书目录
+|   |   |  ├─ server.key                     证书的私钥文件（RSA）
+|   |   |  ├─ server.csr                     证书的签名请求文件（CSR）
+|   |   |  ├─ server.crt                     安全证书
+|   |   |  ├─ ca.crt                         阿帕奇主配置文件
+|   |   |  ├─ ca.key                         阿帕奇主配置文件
+|   |   |  ├─ demoCA                         阿帕奇主配置文件
+|   |   |  └─ ...
+|   |   ├─ cacert.pem                        php的openssl扩展的ca证书
+|   |   ├─ httpd.conf                        httpd的公用配置文件
+|   |   ├─ httpd-ssl.conf                    https协议的公用配置文件
+|   |   ├─ openssl.cnf                       httpd的openssl.exe公用配置文件
+|   |
+|   ├─ default                               缺省站点路径
+|   |   ├─ pma                               MySQL 管理工具
+|   |   ├─ adminer.php                       数据库管理工具
+|   |   ├─ phpinfo.php                       PHP 配置的信息
+|   |   ├─ index.php                         缺省站点提示页面
+|   |
+├─ web                                       wamp配置目录
+|   ├─ sites                                 站点配置文件目录
+|   |
+|   ├─ www                                   站点根目录
+|   |
+|   ├─ data                                  mariadb数据库系统数据存放目录
+|   |
+|   ├─ logs                                  服务器相关日志文件目录
+|   |  ├─ httpd                              apache24日志目录
+|   |  ├─ mariadb                            MariaDB日志目录
+|   |
+|
+├─ install.bat                               安装wamp相关服务到系统服务
+|
+├─ uninstall.bat                             从系统服务卸载wamp相关服务
+|
+├─ 便捷指令.bat                               日常经常用到的wamp相关指令
+|
+└─ 强制删除.bat                               使用net指令来删除wamp相关服务
+```
