@@ -4,9 +4,9 @@ httpd 是当前最流行的 web 服务器软件之一，当下全球排行第二
 
 ## httpd 配置文件
 
-httpd 配置文件分为 `主配置文件` 和 `自定义配置文件`
+httpd 配置文件分为 `根配置文件` 和 `自定义配置文件`
 
-> 主配置文件
+> 根配置文件
 
 | 属性     | 说明                               |
 | -------- | ---------------------------------- |
@@ -78,43 +78,36 @@ httpd 配置文件中经常使用路径或端口，我们可以为它们设置�
 | Include 语句依赖于 mod_include.so 扩展                |
 | Include 的值支持相对路径和绝对路径                    |
 
-- 主配置文件中，载入子配置文件：
+-   根配置文件中，载入子配置文件：
 
-```conf
-<IfModule include_module>
-    Include "${WAMP_ROOT}/base/conf/httpd.conf"
-</IfModule>
-```
+    ```conf
+    <IfModule include_module>
+        Include "${WAMP_ROOT}/base/conf/httpd.conf"
+    </IfModule>
+    ```
 
-- 子配置文件中，载入ssl配置文件以及虚拟主机配置文件
+-   子配置文件中，载入 ssl 配置文件以及虚拟主机配置文件
 
-```conf
-<IfModule include_module>
-    Include "${WAMP_ROOT}/base/conf/httpd-ssl.conf"
-    Include "${WAMP_ROOT}/web/sites/*.conf"
-</IfModule>
-```
-
-> 提示：在此 wamp 设计中， C:/wamp/base/conf/httpd.conf 自定义配置文件是必备的！
+    ```conf
+    <IfModule include_module>
+        Include "${WAMP_ROOT}/base/conf/httpd-ssl.conf"
+        Include "${WAMP_ROOT}/web/sites/*.conf"
+    </IfModule>
+    ```
 
 ### 清理多余配置项目
 
-主配置文件里有很多注释和多余的内容，我们这里可以将其移除掉，具体如下：
+httpd 自带的根配置文件有很多注释说明以及多余配置，我们可以将其移除，具体如下：
 
-| 序号 | 允许移除的内容                                                                     |
-| ---- | ---------------------------------------------------------------------------------- |
-| 01   | 所有注释内容，都可以移除                                                           |
-| 02   | 除了加载 `mod_include.so` 模块必须在主配置文件定义外，其余都可以在自配置文件里定义 |
+-   移除所有注释内容
+-   除了载入 mod_include.so 模块外，其余配置都可以在自定义配置文件里配置
 
-## 源码参考
-
-下面列出供大家参考的配置文件源码：
-
-| 序号 | 源码列表                                  |
-| ---- | ----------------------------------------- |
-| 01   | [主配置文件](./httpd/httpd.conf)          |
-| 02   | [自定义配置文件](./httpd/conf/httpd.conf) |
-| 03   | [httpd 站点配置](./httpd/sites.conf)      |
+| 项目配置文件列表                          |
+| ----------------------------------------- |
+| [根配置文件](./source/httpd-root.md)      |
+| [子配置文件](./source/httpd-sub.md)       |
+| [ssl 配置文件](./source/httpd-ssl.md)     |
+| [虚拟主机配置文件模板](./source/sites.md) |
 
 ## 修改配置文件
 
