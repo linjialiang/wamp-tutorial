@@ -14,14 +14,14 @@
 
 ## 包列表
 
-| 包名                                                                  | 描述           |
-| --------------------------------------------------------------------- | -------------- |
-| [httpd-2.4.48-win64-VS16.zip](https://www.apachelounge.com/download/) | web 服务器     |
-| [php-8.0.10-Win32-vs16-x64.zip](https://windows.php.net/download)     | php 解释器     |
-| [mariadb-10.6.4-winx64.zip](https://downloads.mariadb.org/)           | 数据库系统     |
-| [phpmyadmin](https://www.phpmyadmin.net/files/)                       | MySQL 操作工具 |
-| [adminer](https://www.adminer.org/#download)                          | 数据库操作工具 |
-| VisualCppRedist_AIO_x86_x64_v52.exe                                   | vc 运行库合集  |
+| 包名                                            | 描述               |
+| ----------------------------------------------- | ------------------ |
+| [httpd](https://www.apachelounge.com/download/) | web 服务器         |
+| [php](https://windows.php.net/download)         | php 解释器         |
+| [MariaDB](https://downloads.mariadb.org/)       | 数据库系统         |
+| [phpMyAdmin](https://www.phpmyadmin.net/files/) | MySQL 操作工具     |
+| [adminer](https://www.adminer.org/#download)    | 数据库系统操作工具 |
+| VisualCppRedist_AIO_x86_x64_v52.exe             | vc 运行库合集      |
 
 ## 目录结构
 
