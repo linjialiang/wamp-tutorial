@@ -37,24 +37,20 @@ WAMP 开发环境目录
 |   |  |  └─ ...
 |   |  └─ ...
 |   |
-|   ├─ MariaDB                               MariaDB 10.6版本
+|   ├─ MariaDB                               MariaDB 版本
 |   |  ├─ bin                                MariaDB 可执行程序目录
 |   |  ├─ my.ini                             MariaDB 配置文件
 |   |  └─ ...
 |   |
-|   ├─ php                                   php 8.0版本
+|   ├─ php                                   php版本
 |   |  ├─ ext                                模块目录
 |   |  ├─ php.ini                            php主配置文件
 |   |  └─ ...
 |   |
 |   ├─ conf                                  公用配置文件目录
-|   |   ├─ key                               本地自签署证书目录
-|   |   |  ├─ server.key                     证书的私钥文件（RSA）
-|   |   |  ├─ server.csr                     证书的签名请求文件（CSR）
-|   |   |  ├─ server.crt                     安全证书
-|   |   |  ├─ ca.crt                         阿帕奇主配置文件
-|   |   |  ├─ ca.key                         阿帕奇主配置文件
-|   |   |  ├─ demoCA                         阿帕奇主配置文件
+|   |   ├─ key                               自签署证书目录
+|   |   |  ├─ server.key                     服务器端私钥文件
+|   |   |  ├─ server.crt                     服务器端CA自签安全证书
 |   |   |  └─ ...
 |   |   ├─ cacert.pem                        php的openssl扩展的ca证书
 |   |   ├─ httpd.conf                        httpd的公用配置文件
