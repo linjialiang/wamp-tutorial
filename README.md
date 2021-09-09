@@ -26,60 +26,60 @@
 ## 目录结构
 
 ```text
-================================================================================
+==================================================
 WAMP 开发环境目录
-================================================================================
-├─ base                                     wamp核心目录
-|   ├─ httpd                                 Web服务器
-|   |  ├─ bin                                阿帕奇可执行程序目录
-|   |  ├─ conf                               配置
-|   |  |  ├─ httpd.conf                      阿帕奇主配置文件
+==================================================
+├─ base                    wamp核心目录
+|   ├─ httpd               Web服务器
+|   |  ├─ bin              阿帕奇可执行程序目录
+|   |  ├─ conf             配置
+|   |  |  ├─ httpd.conf    阿帕奇主配置文件
 |   |  |  └─ ...
 |   |  └─ ...
 |   |
-|   ├─ MariaDB                               MariaDB 版本
-|   |  ├─ bin                                MariaDB 可执行程序目录
-|   |  ├─ my.ini                             MariaDB 配置文件
+|   ├─ MariaDB             MariaDB 版本
+|   |  ├─ bin              MariaDB 可执行程序目录
+|   |  ├─ my.ini           MariaDB 配置文件
 |   |  └─ ...
 |   |
-|   ├─ php                                   php版本
-|   |  ├─ ext                                模块目录
-|   |  ├─ php.ini                            php主配置文件
+|   ├─ php                 php版本
+|   |  ├─ ext              模块目录
+|   |  ├─ php.ini          php主配置文件
 |   |  └─ ...
 |   |
-|   ├─ conf                                  公用配置文件目录
-|   |   ├─ key                               自签署证书目录
-|   |   |  ├─ server.key                     服务器端私钥文件
-|   |   |  ├─ server.crt                     服务器端CA自签安全证书
+|   ├─ conf                公用配置文件目录
+|   |   ├─ key             自签署证书目录
+|   |   |  ├─ server.key   服务器端私钥文件
+|   |   |  ├─ server.crt   服务器端CA自签安全证书
 |   |   |  └─ ...
-|   |   ├─ cacert.pem                        php的openssl扩展的ca证书
-|   |   ├─ httpd.conf                        httpd的公用配置文件
-|   |   ├─ httpd-ssl.conf                    https协议的公用配置文件
-|   |   ├─ openssl.cnf                       httpd的openssl.exe公用配置文件
+|   |   ├─ cacert.pem      php的openssl扩展的ca证书
+|   |   ├─ httpd.conf      httpd的公用配置文件
+|   |   ├─ httpd-ssl.conf  https协议的公用配置文件
+|   |   ├─ openssl.cnf     httpd的openssl公用配置文件
 |   |
-|   ├─ default                               缺省站点路径
-|   |   ├─ pma                               MySQL 管理工具
-|   |   ├─ adminer.php                       数据库管理工具
-|   |   ├─ phpinfo.php                       PHP 配置的信息
-|   |   ├─ index.php                         缺省站点提示页面
+|   ├─ default             缺省站点路径
+|   |   ├─ pma             MySQL 管理工具
+|   |   ├─ adminer.php     数据库管理工具
+|   |   ├─ phpinfo.php     PHP 配置的信息
+|   |   ├─ index.php       缺省站点提示页面
 |   |
-├─ web                                       wamp配置目录
-|   ├─ sites                                 站点配置文件目录
+├─ web                     wamp配置目录
+|   ├─ sites               虚拟主机配置文件目录
 |   |
-|   ├─ www                                   站点根目录
+|   ├─ www                 站点根目录
 |   |
-|   ├─ data                                  mariadb数据库系统数据存放目录
+|   ├─ data                MariaDB的数据目录
 |   |
-|   ├─ logs                                  服务器相关日志文件目录
-|   |  ├─ httpd                              apache24日志目录
-|   |  ├─ mariadb                            MariaDB日志目录
+|   ├─ logs                服务器相关日志文件目录
+|   |  ├─ httpd            apache24日志目录
+|   |  ├─ mariadb          MariaDB日志目录
 |   |
 |
-├─ install.bat                               安装wamp相关服务到系统服务
+├─ install.bat             安装wamp相关服务到系统服务
 |
-├─ uninstall.bat                             从系统服务卸载wamp相关服务
+├─ uninstall.bat           卸载wamp相关系统服务
 |
-├─ 便捷指令.bat                               日常经常用到的wamp相关指令
+├─ menu.bat                日常用到的操作菜单
 |
-└─ 强制删除.bat                               使用net指令来删除wamp相关服务
+└─ force-delete.bat        net指令删除wamp相关系统服务
 ```
