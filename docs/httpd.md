@@ -46,6 +46,7 @@ httpd 配置文件中经常使用路径或端口，我们可以为它们设置�
     | -------- | ---------------------------------------- |
     | 定义变量 | Define SRVROOT "${WAMP_ROOT}/base/httpd" |
     | 输出变量 | ${SRVROOT}                               |
+    | 默认值   | Define SRVROOT "c:/Apache24"             |
 
     | 变量名称 | 站点根目录                           |
     | -------- | ------------------------------------ |
@@ -69,21 +70,28 @@ httpd 配置文件中经常使用路径或端口，我们可以为它们设置�
 
 提示：尽量少定义变量，这会增加 httpd 的负荷！
 
-### 变量 `SRVROOT`
-
-SRVROOT 是 httpd 主配置文件里自带的变量，用于确定 httpd 所在位置，默认值为 `c:/Apache24`。
-
-| 默认值                         | 需要的值                                   |
-| ------------------------------ | ------------------------------------------ |
-| `Define SRVROOT "c:/Apache24"` | `Define SRVROOT "${WAMP_ROOT}/base/httpd"` |
-
 ### 增加自定义配置文件
 
-自定义配置文件通过主配置文件中 `Include` 语句加载，支持相对路径和绝对路径，具体代码如下：
+| 概述                                                  |
+| ----------------------------------------------------- |
+| 在父级配置文件中，通过 Include 语句加载自定义配置文件 |
+| Include 语句依赖于 mod_include.so 扩展                |
+| Include 的值支持相对路径和绝对路径                    |
+
+- 主配置文件中，载入子配置文件：
 
 ```conf
 <IfModule include_module>
     Include "${WAMP_ROOT}/base/conf/httpd.conf"
+</IfModule>
+```
+
+- 子配置文件中，载入ssl配置文件以及虚拟主机配置文件
+
+```conf
+<IfModule include_module>
+    Include "${WAMP_ROOT}/base/conf/httpd-ssl.conf"
+    Include "${WAMP_ROOT}/web/sites/*.conf"
 </IfModule>
 ```
 
