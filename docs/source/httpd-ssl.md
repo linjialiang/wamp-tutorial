@@ -1,8 +1,8 @@
-# ssl 根配置文件
+# ssl 配置文件
 
 ssl 配置文件是 httpd 自带的，路径可改，内容可变
 
--   路径：C:\wamp\base\httpd\conf\httpd.conf
+-   路径：C:\wamp\base\conf\httpd-ssl.conf
 
 ## 参考配置:
 

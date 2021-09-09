@@ -1,3 +1,12 @@
+# 子配置文件
+
+子配置文件是我们创建的，路径随意指定，内容按需配置
+
+-   路径：C:\wamp\base\conf\httpd.conf
+
+## 参考配置:
+
+```conf
 LoadModule vhost_alias_module modules/mod_vhost_alias.so
 LoadModule rewrite_module modules/mod_rewrite.so
 LoadModule deflate_module modules/mod_deflate.so
@@ -109,12 +118,12 @@ DocumentRoot "${WAMP_ROOT}/base/default"
     SetEnvIfNoCase Request_URI .(?:gif|jpe?g|png)$ no-gzip dont-vary
     SetEnvIfNoCase Request_URI .(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
     SetEnvIfNoCase Request_URI .(?:pdf|mov|avi|mp3|mp4|rm)$ no-gzip dont-vary
-    
+
     <IfModule filter_module>
         AddOutputFilterByType DEFLATE text/html text/css
         AddOutputFilterByType DEFLATE application/javascript application/x-httpd-php
     </IfModule>
-    
+
     <IfModule headers_module>
         RewriteCond "%{HTTP:Accept-encoding}" "gzip"
         RewriteCond "%{REQUEST_FILENAME}\.gz" -s
@@ -132,3 +141,4 @@ DocumentRoot "${WAMP_ROOT}/base/default"
         </FilesMatch>
     </IfModule>
 </IfModule>
+```
