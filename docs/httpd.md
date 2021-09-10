@@ -593,3 +593,95 @@ Alias /phpinfo ${WAMP_ROOT}/base/default/phpinfo.php
     </IfModule>
 </IfModule>
 ```
+
+## 配置 ssl 自签证书
+
+自签证书有 3 个组织或个人
+
+| 序号 | 内容    |
+| ---- | ------- |
+| 1    | CA 机构 |
+| 2    | 服务端  |
+| 3    | 客户端  |
+
+生成证书需要在指定目录处理，便于加载 openssl 配置文件
+
+-   进入目录：c:\wamp\base\conf\keys
+
+### 生成 CA 机构的数据
+
+CA 机构是给服务端和客户端颁发证书的，其本质也是密钥对
+
+1. 生成 CA 机构的私钥
+
+    ```cmd
+    > openssl genrsa -out ca.key 1024
+    ```
+
+2. 生成 CA 机构的证书签名请求管理
+
+    ```cmd
+    > openssl req -new -key ca.key -out ca.csr -config ../openssl.cnf -days 36500
+    ```
+
+3. 生成 CA 机构的证书数据管理
+
+    ```cmd
+    > openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt  -days 36500
+    ```
+
+### 生成服务端的数据
+
+服务端存放网站数据，只有服务端被认证为安全可靠，用户信息才有保障
+
+1. 生成服务端私钥
+
+    ```cmd
+    > openssl genrsa -out server.key 1024
+    ```
+
+2. 生成服务端公钥
+
+    ```cmd
+    > openssl rsa -in server.key -pubout -out server.pem
+    ```
+
+3. 服务端向 CA 机构申请签名证书
+
+    ```cmd
+    > openssl req -new -key server.key -out server.csr -config ../openssl.cnf -days 36500
+    ```
+
+4. CA 机构为服务端颁发安全证书
+
+    ```cmd
+    > openssl x509 -req -CA ca.crt -CAkey ca.key -CAcreateserial -in server.csr -out server.crt -days 36500
+    ```
+
+### 生成客户端的数据
+
+有时候服务端也需要确保客户端是安全可靠的，比如支付、登录管理后台等
+
+1. 生成客户端私钥
+
+    ```cmd
+    > openssl genrsa -out client.key 1024
+    ```
+
+2. 生成客户端公钥
+
+    ```cmd
+    > openssl rsa -in client.key -pubout -out client.pem
+    ```
+
+3. 客户端向 CA 机构申请签名证书
+
+    ```cmd
+    > openssl req -new -key client.key -out client.csr -config ../openssl.cnf -days 36500
+    ```
+
+4. CA 机构为客户端颁发安全证书
+
+    ```cmd
+    > openssl x509 -req -CA ca.crt -CAkey ca.key -CAcreateserial -in client.csr -out client.crt -days 36500
+    ```
