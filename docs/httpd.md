@@ -105,7 +105,7 @@ httpd 自带的根配置文件有很多注释说明以及多余配置，我们�
 | [根配置文件](./source/httpd-root.md)      |
 | [子配置文件](./source/httpd-sub.md)       |
 | [ssl 配置文件](./source/httpd-ssl.md)     |
-| [虚拟主机配置文件模板](./source/sites.md) |
+| [虚拟主机配置文件模板](./source/vhosts.md) |
 
 下面我们开始讲解 httpd 配置文件中我们可能需要改变的内容
 
