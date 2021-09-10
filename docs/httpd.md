@@ -425,6 +425,62 @@ mod_authz_core 模块包含 3 种授权容器，授权容器返回 3 种状态�
 
 ### 授权语句
 
+httpd 常用授权指令包含如下：
+
+1. Require all
+
+    | 描述     | 指令                |
+    | -------- | ------------------- |
+    | 全部允许 | Require all granted |
+    | 全部拒绝 | Require all denied  |
+
+2. Require method
+
+    设置允许的 http 请求
+
+    ```conf
+    # 仅允许 HEAD GET POST OPTIONS 请求方法
+    Require method GET POST OPTIONS
+    ```
+
+    ```conf
+    <RequireAny>
+        # 允许 HEAD GET POST OPTIONS 请求方法
+        Require method GET POST OPTIONS
+        # 其他请求方法都需要有效用户
+        Require valid-user
+    </RequireAny>
+    ```
+
+3. Require expr
+
+    允许以正则表达式授权，日常很少使用
+
+> 下面列举一些常用授权指令：
+
+```conf
+Require all granted
+    无条件允许访问
+Require all denied
+    无条件拒绝访问
+Require env env-var [env-var] ...
+    仅当设置了给定的环境变量之一时才允许访问
+Require method http-method [http-method] ...
+    仅允许对给定的 HTTP 方法进行访问
+Require expr expression
+    如果表达式的计算结果为真，则允许访问。
+Require user userid [userid] ...
+    只有指定用户才能访问资源
+Require group group-name [group-name] ...
+    只有指定用户组中的用户才能访问资源
+Require valid-user
+    所有有效用户都可以访问该资源
+Require ip 10 172.20 192.168.2
+    指定 IP 地址范围内的客户端可以访问该资源
+Require forward-dns dynamic.example.org
+    从地址为 dynamic.example.org 的 DNS 中，解析出的客户端 IP 将被授予访问权限
+```
+
 ## 默认读取文件
 
 `mod_dir.so` 模块允许通过 `DirectoryIndex` 参数设置默认文件，具体设置如下：
