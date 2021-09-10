@@ -315,9 +315,9 @@ php_imagick.dll 用于替代 gd2，安装需要下载两个软件包：
     ```
 
 3.  将 ImageMagick 依赖库库解压到 C:\wamp\base\ImageMagick
-4.  将 C:\wamp\base\ImageMagick\bin 加入到 win 系统环境变量中
+4.  将 C:\wamp\base\ImageMagick\bin 加入到 win 系统环境变量 PATH 中
 
-说明：C:\wamp\base\ImageMagick\bin 必须加入的 win 系统环境变量，因为 httpd 无法获取到用户环境变量！
+重要说明：C:\wamp\base\ImageMagick\bin 必须加入的 win 系统环境变量 PATH 中，因为 httpd 无法获取到用户环境变量！
 
 ## 安装 composer
 
