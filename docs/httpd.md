@@ -225,7 +225,6 @@ LoadModule 模块标识符 模块路径
 
     ```conf
     <Directory />
-        Options None
         AllowOverride None
         Require all denied
     </Directory>
