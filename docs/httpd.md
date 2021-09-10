@@ -182,7 +182,7 @@ LoadModule 模块标识符 模块路径
     ```conf
     <IfModule php_module>
         PHPINIDir "${WAMP_ROOT}/base/php"
-        # 一下loadFIle 语句是为了解决 php 的 curl 扩展问题
+        # 下面的 loadFIle 语句是为了解决 php 的 curl 扩展问题
         LoadFile  "${WAMP_ROOT}/base/php/libssh2.dll"
         LoadFile  "${WAMP_ROOT}/base/php/libcrypto-1_1-x64.dll"
         LoadFile  "${WAMP_ROOT}/base/php/libssl-1_1-x64.dll"
@@ -685,3 +685,97 @@ CA 机构是给服务端和客户端颁发证书的，其本质也是密钥对
     ```cmd
     > openssl x509 -req -CA ca.crt -CAkey ca.key -CAcreateserial -in client.csr -out client.crt -days 36500
     ```
+
+### ssl 版虚拟主机
+
+1. 单向验证 —— 验证服务端
+
+    客户端需要确认服务端安全可靠
+
+    ```conf
+    <VirtualHost *:${HTTPS_PORT}>
+        SSLEngine on
+        SSLCertificateFile "${WAMP_ROOT}/base/conf/keys/server.crt"
+        SSLCertificateKeyFile "${WAMP_ROOT}/base/conf/keys/server.key"
+    </VirtualHost>
+    ```
+
+2. 单向验证 —— 验证客户端
+
+    服务端需要确认客户端安全可靠
+
+3. 双向验证
+
+    客户端需要确认服务端安全可靠
+
+    服务端需要确认客户端安全可靠
+
+## 日志
+
+httpd 日志主要用到的是访问日志和错误日志
+
+### 错误日志
+
+错误日志用于记录服务器将遇到的任何错误记录，最主要的 2 个指令如下：
+
+1. ErrorLog
+
+    指定错误日志记录文件名，如果文件路径不是绝对路径，则假定它相对于 httpd 根目录
+
+2. LogLevel
+
+    LogLevel 指令用于调整错误日志中记录的消息的详细程度，具体如下：
+
+    | 级别   | 说明                   |
+    | ------ | ---------------------- |
+    | emerg  | 紧紧急(系统无法使用)   |
+    | alert  | 必须立即采取行动       |
+    | crit   | 致命情况               |
+    | error  | 错误情况               |
+    | warn   | 警告情况               |
+    | notice | 一般重要情况           |
+    | info   | 普通信息               |
+    | debug  | 调试信息               |
+    | trace1 | Trace messages         |
+    | trace2 | Trace messages         |
+    | trace3 | Trace messages         |
+    | trace4 | Trace messages         |
+    | trace5 | Trace messages         |
+    | trace6 | Trace messages         |
+    | trace7 | 跟踪消息，转储大量数据 |
+    | trace8 | 跟踪消息，转储大量数据 |
+
+通常我们使用分割是方式来记录错误日志：
+
+```conf
+LogLevel crit
+ErrorLog "|${SRVROOT}/bin/rotatelogs.exe -t ${HTLOGS}/error/error_log.%Y-%m-%d-%H_%M_%S 5M 480"
+```
+
+### 访问日志
+
+mod_log_config 模块提供了 Client 端请求的灵活日志记录，此模块提供了三个指令：
+
+| 指令        | 说明                   |
+| ----------- | ---------------------- |
+| TransferLog | 创建日志文件           |
+| LogFormat   | 设置自定义格式         |
+| CustomLog   | 一步定义日志文件和格式 |
+
+通常我们使用分割是方式来记录访问日志：
+
+```conf
+<IfModule log_config_module>
+    LogFormat "$V-%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    LogFormat "$V-%h %l %u %t \"%r\" %>s %b" common
+    LogFormat "%h-%v-%V %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" newlogformat
+
+    <IfModule logio_module>
+    LogFormat "$V-%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
+    </IfModule>
+
+    SetEnvIf Request_URI "\.(ico|gif|jpg|png|bmp|swf|css|js)$" dontlog
+
+    CustomLog "|${SRVROOT}/bin/rotatelogs.exe -t ${HTLOGS}/access/access_log.%Y-%m-%d 86400 480" newlogformat env=!dontlog
+</IfModule>
+```
