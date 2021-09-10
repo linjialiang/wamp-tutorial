@@ -199,15 +199,21 @@ LoadModule 模块标识符 模块路径
 
 1. 设置全局邮箱地址
 
+    多站点模式下，没有指定邮箱地址的虚拟主机都会指向该邮箱
+
     ```conf
     ServerAdmin qy@y746.com
     ```
 
 2. 设置全局主机名
 
+    多站点模式下，没有指定主机名的虚拟主机都会指向该主机名
+
     ```conf
     ServerName localhost
     ```
+
+    > 提示：这会造成一个问题，就是访问 localhost 的时候，可能是某个虚拟主机的路径
 
 3. 设置全局目录
 
@@ -238,6 +244,27 @@ LoadModule 模块标识符 模块路径
     </Directory>
     ```
 
+    虚拟主机根目录访问权限，允许用户访问文件以及索引
+
+    ```conf
+    <Directory "${HTDOCS}">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ```
+
+5. 设置监听端口
+
+    新版本在没有设置监听端口时，httpd 将无法启动
+
+    可以通过多个 Listn 语句，来添加多个监听端口
+
+    ```conf
+    Listen ${HTTP_PORT}
+    Listen ${HTTPS_PORT}
+    ```
+
 ### 单站点模式
 
 如果服务器只有一个站点的话，不需要加载虚拟主机模块， 使用全局目录作为站点根目录
@@ -246,22 +273,26 @@ LoadModule 模块标识符 模块路径
 
 多站点需要加载虚拟主机模块，来创建多个虚拟主机
 
-1. 虚拟主机缺省站点
+1. 设置虚拟主机缺省站点
 
-    httpd 的 `mod_vhost_alias.so` 模块规则定义，第一条满足条件的虚拟站点为缺省站点，具体定义如下：
+    如果未通过 `_default_` 设置缺省站点，第 1 个虚拟站点会默认升级为缺省站点，具体定义如下：
 
     ```conf
+    # http 协议的缺省站点
     <VirtualHost _default_:${HTTP_PORT}>
+        DocumentRoot "${WAMP_ROOT}/base/default"
+    </VirtualHost>
+    # https 协议的缺省站点
+    <VirtualHost _default_:${HTTPS_PORT}>
         DocumentRoot "${WAMP_ROOT}/base/default"
     </VirtualHost>
     ```
 
-    > 提示：任何解析到当前服务器的域名，只要没有配置虚拟主机，都会指定到改缺省虚拟主机下；
+    缺省站点作用：
 
-    | 缺省值       | 描述                                   |
-    | ------------ | -------------------------------------- |
-    | 缺省虚拟主机 | 未定义虚拟主机的域名指向的虚拟主机配置 |
-    | 站点缺省路径 | 未定义路径的虚拟主机指向的站点根目录   |
+    ```text
+    - 解析到服务器的域名，没有配置虚拟主机，自动跳转到虚拟主机缺省站点
+    ```
 
 2. 站点访问权限
 
