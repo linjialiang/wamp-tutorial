@@ -115,53 +115,81 @@ httpd 自带的根配置文件有很多注释说明以及多余配置，我们�
 
 ### 加载必要模块
 
-我们搭建的 wamp 环境额外增加如下插件，这些插件默认不开启，需自己启用：
+我们搭建的 wamp 环境额外增加如下插件，这些插件默认不开启，需自己启用，加载模块具体格式：
 
-| 模块名        | 加载模块                                                   |
-| ------------- | ---------------------------------------------------------- |
-| `mod_alias`   | `LoadModule vhost_alias_module modules/mod_vhost_alias.so` |
-| `mod_rewrite` | `LoadModule rewrite_module modules/mod_rewrite.so`         |
+```conf
+LoadModule 模块标识符 模块路径
+```
 
-> 加载模块格式 `LoadModule 模块标识符 模块路径（支持相对路径和绝对路径）`
-
-### 绑定 php
-
-我们这里采用了模块的方式绑定 php：
-
-| 绑定 php 步骤 | 描述                       |
-| ------------- | -------------------------- |
-| 01            | 加载 httpd 自带的 php 模块 |
-| 02            | 获取 php.ini 目录          |
-
-1. 加载 php 模块
+1. 虚拟主机模块
 
     ```conf
-    LoadModule php7_module ${WAMP_ROOT}/base/php/php7apache2_4.dll
+    LoadModule vhost_alias_module modules/mod_vhost_alias.so
     ```
 
-2. 获取 php 配置文件所在目录（php.ini）
+2. 伪静态模块
 
     ```conf
-    <IfModule php7_module>
-      PHPINIDir "${WAMP_ROOT}/base/php"
-    </IfModule>
+    LoadModule rewrite_module modules/mod_rewrite.so
     ```
 
-3. 题外话： `mod_unixd` 模块
-
-    mod_unixd 是 类 unix 平台的基本安全性模块，属于必须配置项（windows 不需要这个）
-
-    | 属性             | 描述                     |
-    | ---------------- | ------------------------ |
-    | `User 用户名`    | 指定 apache24 的用户     |
-    | `Group 用户组名` | 指定 apache24 的用户群组 |
-
-    > 代码示例：
+3. 文件缓存模块
 
     ```conf
-    <IfModule unixd_module>
-        User www
-        Group www
+    LoadModule headers_module modules/mod_headers.so
+    ```
+
+4. 压缩传输模块
+
+    传输速度加快，服务器负荷增加，配合文件缓存模块效果更佳
+
+    ```conf
+    LoadModule deflate_module modules/mod_deflate.so
+    ```
+
+5. 过滤器模块
+
+    可以实现，只允许部分格式的文件，进行压缩传输
+
+    ```conf
+    LoadModule filter_module modules/mod_filter.so
+    ```
+
+6. ssl 模块
+
+    ```conf
+    LoadModule ssl_module modules/mod_ssl.so
+    ```
+
+7. 共享对象缓存
+
+    主要是根 ssl 模块结合使用，提高 https 访问效率
+
+    ```conf
+    LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
+    ```
+
+### 加载 php 处理模块
+
+在 wamp 里 php 通常以 httpd 模块的形式被加载，具体加载步骤如下：
+
+1. 加载 httpd 自带的 php8 模块
+
+    建议以绝对路径的方式加载 dll 形式的模块
+
+    ```conf
+    LoadModule php_module ${WAMP_ROOT}/base/php/php8apache2_4.dll
+    ```
+
+2. 获取 php 模块必备配置信息
+
+    ```conf
+    <IfModule php_module>
+        PHPINIDir "${WAMP_ROOT}/base/php"
+        # 一下loadFIle 语句是为了解决 php 的 curl 扩展问题
+        LoadFile  "${WAMP_ROOT}/base/php/libssh2.dll"
+        LoadFile  "${WAMP_ROOT}/base/php/libcrypto-1_1-x64.dll"
+        LoadFile  "${WAMP_ROOT}/base/php/libssl-1_1-x64.dll"
     </IfModule>
     ```
 
@@ -169,19 +197,29 @@ httpd 自带的根配置文件有很多注释说明以及多余配置，我们�
 
 这些值会为稍后在文件中定义的任何虚拟主机容器提供缺省值。
 
-1. 设置默认邮箱地址
+1. 设置全局邮箱地址
 
     ```conf
-    ServerAdmin admin@example.com
+    ServerAdmin qy@y746.com
     ```
 
 2. 设置全局主机名
 
     ```conf
-    # ServerName www.example.com:80
+    ServerName localhost
     ```
 
-3. 拒绝访问整个服务器的文件系统
+3. 设置全局目录
+
+    多站点模式下，没有指定 DocumentRoot 的虚拟主机都会指向该路径
+
+    ```conf
+    DocumentRoot "${WAMP_ROOT}/base/default"
+    ```
+
+4. 设置访问权限
+
+    整个服务器文件系统，拒绝用户访问
 
     ```conf
     <Directory />
@@ -190,25 +228,7 @@ httpd 自带的根配置文件有很多注释说明以及多余配置，我们�
     </Directory>
     ```
 
-    > 这个必须配置，否则服务器根目录都将对外开放！
-
-### 单站点模式
-
-如果服务器只有一个站点的话，就没必要开启 `mod_vhost_alias.so` 模块， 这时候 `DocumentRoot` 就是站点根目录了。
-
-1. 通过 `DocumentRoot` 的参数来指定单站点的路径：
-
-```conf
-DocumentRoot "${WAMP_ROOT}/base/default"
-```
-
-2. 站点缺省路径
-
-在多站点模式中，任何没有单独指定 `DocumentRoot` 参数的虚拟主机都会缺省指向该路径
-
-3. 站点缺省路径访问权限
-
-    默认情况下，httpd 禁止访问所有路径（继承于 `<Directory />` 的配置），添加站点缺省路径权限具体操作如下：
+    httpd 全局目录访问权限，允许用户访问文件
 
     ```conf
     <Directory "${WAMP_ROOT}/base/default">
@@ -218,16 +238,20 @@ DocumentRoot "${WAMP_ROOT}/base/default"
     </Directory>
     ```
 
+### 单站点模式
+
+如果服务器只有一个站点的话，不需要加载虚拟主机模块， 使用全局目录作为站点根目录
+
 ### 多站点模式
 
-通常服务器会有多个站点，这时就需要加载 `mod_vhost_alias.so` 模块来创建多个虚拟主机了。
+多站点需要加载虚拟主机模块，来创建多个虚拟主机
 
-1. 缺省虚拟主机
+1. 虚拟主机缺省站点
 
     httpd 的 `mod_vhost_alias.so` 模块规则定义，第一条满足条件的虚拟站点为缺省站点，具体定义如下：
 
     ```conf
-    <VirtualHost *:${HTTP_PORT}>
+    <VirtualHost _default_:${HTTP_PORT}>
         DocumentRoot "${WAMP_ROOT}/base/default"
     </VirtualHost>
     ```
