@@ -560,148 +560,112 @@ windows 安装 composer 简易说明：
 1. 首先将 PHP 根目录（c:\wamp\base\php）加入环境变量 PATH 中
 
     ```text
-    如果没加入系统环境变量中，安装时就需要指定 php可执行文件 的全路径
+    如果没加入系统环境变量中，安装时就需要指定 php 可执行文件的全路径
     ```
 
-2.
+2. 下载 composer 安装脚本
 
+    可以是任意目录，建议进入 php 根目录
 
-    > 。
-
-4. 任意目录下，下载 composer 安装脚本：
-
-    ```sh
-    $ php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    ```cmd
+    > cd c:\\wamp\\php
+    > php.exe -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     ```
 
-5. 检测文件是否被篡改
+3. 检测文件是否被篡改
 
-    ```sh
-    $ php -r "if (hash_file('sha384', 'composer-setup.php') === 'a5c698ffe4b8e849a443b120cd5ba38043260d5c4023dbf93e1558871f1f07f58274fc6f4c93bcfd858c6bd0775cd8d1') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    ```cmd
+    > php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
     ```
 
-    > 提示：`composer-setup.php` 官方会更新，所以 hash 值需要去[官网查看](https://getcomposer.org/download/)
+    提示：composer-setup.php 文件官方会更新，所以 hash 值需要去[官网查看](https://getcomposer.org/download/)
 
-6. 执行 composer 安装脚本：
+4. 执行 composer 安装脚本：
 
-    ```sh
-    $ php ./composer-setup.php
+    ```cmd
+    > php.exe composer-setup.php
     ```
 
-7. `compser.phar` 安装成功，移除安装脚本：
+    执行脚本选项说明：
 
-    ```sh
-    $ php -r "unlink('composer-setup.php');"
+    ```text
+    - 指定目标目录: php composer-setup.php --install-dir=bin
+    - 指定文件名: php composer-setup.php --filename=composer
+    - 指定特定版本: php composer-setup.php --version=2.1.6
     ```
 
-8. 移动 composer.phar 文件到可执行目录中：
+5. `compser.phar` 安装成功，移除安装脚本：
 
-    ```sh
-    $ mv composer.phar /server/php/bin/
+    ```cmd
+    > php.exe -r "unlink('composer-setup.php');"
     ```
 
-    > 提示：建议 `composer 文件` 与 `php 执行程序` 处于同一目录！
+6. 移动 composer.phar 文件到 php 根目录下
 
-### 执行脚本选项说明：
-
-| 选项            | 作用         | 案例                                            |
-| --------------- | ------------ | ----------------------------------------------- |
-| `--install-dir` | 指定目标目录 | `php composer-setup.php --install-dir=bin`      |
-| `--filename`    | 指定文件名   | `php composer-setup.php --filename=composer`    |
-| `--version`     | 指定特定版本 | `php composer-setup.php --version=1.0.0-alpha8` |
-
-### Linux 下全局调用 `composer.phar`
-
-1. 将 `composer.phar` 移动到 `php 可执行程序目录` 中：
-
-    ```sh
-    $ mv composer.phar /server/php/bin/
+    ```text
+    如果使用 git bash，需要拷贝一份，并重命名为：composer
     ```
 
-2. 将 php 的 `php 可执行程序目录` 的路径加入到环境变量中：
+7. 配置 bat 文件，方便 cmd 下操作：
 
-    > `/etc/profile` 用于定义 Linux 系统环境变量
-
-    ```sh
-    $ cp /etc/profile{,.bak}
-    $ vim /etc/profile
+    ```cmd
+    > echo @php "%~dp0composer.phar" %*>composer.bat
     ```
-
-    > 在 /etc/profile 底部加入 1 行内容
-
-    ```sh
-    export PATH=$PATH:/server/php/bin:/server/php/sbin
-    ```
-
-    > 使用 `source` 指令重载 profile 文件内容到环境变量：
-
-    ```sh
-    $ source /etc/profile
-    ```
-
-### Windows 下全局调用 `composer.phar`
-
-| 步骤 | 操作说明                                         |
-| ---- | ------------------------------------------------ |
-| 01   | 将 `composer.phar` 移动到 php 跟目录             |
-| 02   | 打开 cmd，进入 php 根目录，并执行第 3 步骤指令   |
-| 03   | `echo @php "%~dp0composer.phar" %*>composer.bat` |
-| 04   | 将 `php 根目录` 的路径加入到系统环境变量中       |
 
 ### 切换 composer 镜像
 
-如果 composer 镜像不能正常访问，我们可以更换成阿里云镜像：
+我们建议更换成阿里云镜像，具体常用指令如下：
 
-1. 全局切换镜像源：
+1. 全局更换 composer 镜像源
 
-    ```sh
-    $ composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+    ```cmd
+    > composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
     ```
 
-    > 取消配置
+2. 全局移除 composer 镜像源
 
-    ```sh
-    $ composer config -g --unset repos.packagist
+    ```cmd
+    > composer config -g --unset repos.packagist
     ```
 
-2. 仅限当前工程使用镜像，全局操作中 `去掉 -g` 即可：
+3. 项目更换 composer 镜像源：
 
-    ```sh
-    $ composer config repo.packagist composer https://mirrors.aliyun.com/composer/
+    ```cmd
+    > composer config repo.packagist composer https://mirrors.aliyun.com/composer/
     ```
 
-    > 取消配置
+4. 项目移除 composer 镜像源
 
-    ```sh
-    $ composer config --unset repos.packagist
+    ```cmd
+    > composer config --unset repos.packagist
     ```
 
-3. 恢复官方镜像：
+5. 全局恢复 composer 官方镜像：
 
-    ```sh
-    $ composer config -g repo.packagist composer https://packagist.org
+    ```cmd
+    > composer config -g repo.packagist composer https://packagist.org
     ```
 
-4. 调试
+6. 清除 composer 缓存
 
-    ```sh
-    $ composer -vvv require alibabacloud/sdk
+    ```cmd
+    > composer clear
     ```
 
-5. 清除缓存
+7. 更新 composer.lock 文件的源地址
 
-    ```sh
-    $ composer clear
+    ```cmd
+    > composer update --lock
     ```
 
-6. 若项目之前已通过其他源安装，则需要更新 composer.lock 文件，执行命令：
+8. 执行诊断命令：
 
-    ```sh
-    $ composer update --lock
+    ```cmd
+    > composer diagnose
     ```
 
-7. 执行诊断命令：
+9. 调试
 
-    ```sh
-    $ composer diagnose
+    ```cmd
+    > composer -vvv require alibabacloud/sdk
     ```
