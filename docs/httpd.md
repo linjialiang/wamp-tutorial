@@ -100,11 +100,11 @@ httpd 自带的根配置文件有很多注释说明以及多余配置，我们�
 -   移除所有注释内容
 -   除了载入 mod_include.so 模块外，其余配置都可以在自定义配置文件里配置
 
-| 项目配置文件列表                          |
-| ----------------------------------------- |
-| [根配置文件](./source/httpd-root.md)      |
-| [子配置文件](./source/httpd-sub.md)       |
-| [ssl 配置文件](./source/httpd-ssl.md)     |
+| 项目配置文件列表                           |
+| ------------------------------------------ |
+| [根配置文件](./source/httpd-root.md)       |
+| [子配置文件](./source/httpd-sub.md)        |
+| [ssl 配置文件](./source/httpd-ssl.md)      |
 | [虚拟主机配置文件模板](./source/vhosts.md) |
 
 下面我们开始讲解 httpd 配置文件中我们可能需要改变的内容
@@ -182,7 +182,7 @@ LoadModule 模块标识符 模块路径
     ```conf
     <IfModule php_module>
         PHPINIDir "${WAMP_ROOT}/base/php"
-        # 下面的 loadFIle 语句是为了解决 php 的 curl 扩展问题
+        # 下面的 loadFIle 语句是为了解决 php 的 curl、openssl模块的问题
         LoadFile  "${WAMP_ROOT}/base/php/libssh2.dll"
         LoadFile  "${WAMP_ROOT}/base/php/libcrypto-1_1-x64.dll"
         LoadFile  "${WAMP_ROOT}/base/php/libssl-1_1-x64.dll"
