@@ -41,46 +41,68 @@ php 采用相对于 extension_dir 设置的路径载入模块，所以必须在 
 
 ### php 常用模块
 
-1. 载入模块方式
+-   php_curl.dll
 
-| 常用扩展          | 说明                                                                           |
-| ----------------- | ------------------------------------------------------------------------------ |
-| php_curl.dll      | 让 php 能够连接通讯各种服务器、使用各种协议（需要开启 `php_openssl.dll` 扩展） |
-| php_gd2.dll       | php 对图像处理的扩展                                                           |
-| php_mbstring.dll  | php 对多字节的支持（多国语言并存就意味着多字节）                               |
-| php_mysqli.dll    | php 对 mysql 的 mysqli 语法支持                                                |
-| php_openssl.dll   | php 开启对 openssl 支持                                                        |
-| php_pdo_mysql.dll | php 对 mysql 支持 pdo 语法支持                                                 |
-| php_imagick.dll   | php 下完美的图形操作扩展，需要手动添加                                         |
+    ```text
+    - 类型： 二进制包自带模块
+    - 作用： 让 php 能够连接通讯各种服务器、使用各种协议
+    - 依赖： 依赖 php_openssl.dll 模块
+    ```
 
-1. php 扩展写入 php.ini 格式：
+-   php_gd2.dll
 
-    | 扩展文件名     | 格式 1                   | 格式 2           |
-    | -------------- | ------------------------ | ---------------- |
-    | `php_别名.dll` | `extension=php_别名.dll` | `extension=别名` |
+    ```text
+    - 类型： 二进制包自带模块
+    - 作用： 图像处理
+    - 依赖： 无
+    ```
 
-2. xdebug 扩展说明
+-   php_mbstring.dll
 
-    由于 xdebug 的驱动程序与其它官方自带扩展不同，我们应写在 php.ini 最下方，写法如下：
+    ```text
+    - 类型： 二进制包自带模块
+    - 作用： 支持多字节
+    - 依赖： 无
+    ```
 
-    ```ini
-    [Xdebug]
-    zend_extension=xdebug
+-   php_mysqli.dll
 
-    xdebug.collect_params = 4
-    xdebug.dump_globals = 1
-    xdebug.dump_undefined = 1
-    xdebug.trace_output_dir = "C:\wamp\web\logs\xdebug"
-    xdebug.gc_stats_enable = 1
-    xdebug.gc_stats_output_dir = "C:\wamp\web\logs\xdebug"
-    xdebug.profiler_enable = 1
-    xdebug.profiler_output_dir = "C:\wamp\web\logs\xdebug"
+    ```text
+    - 类型： 二进制包自带模块
+    - 作用： 对 mysql 的 mysqli 语法支持
+    - 依赖： 无
+    ```
 
-    xdebug.remote_enable = 1
-    xdebug.remote_autostart = 1
-    xdebug.idekey = WAMP
-    xdebug.remote_host = localhost
-    xdebug.remote_port = 9000
+-   php_pdo_mysql.dll
+
+    ```text
+    - 类型： 二进制包自带模块
+    - 作用： 对 mysql 支持 pdo 语法支持
+    - 依赖： 无
+    ```
+
+-   php_openssl.dll
+
+    ```text
+    - 类型： 二进制包自带模块
+    - 作用： 对 openssl 支持
+    - 依赖： 无
+    ```
+
+-   php_imagick.dll
+
+    ```text
+    - 类型： http://pecl.php.net/ 下载模块
+    - 作用： 比gd2更好的处理图形操作
+    - 依赖： https://windows.php.net/downloads/pecl/releases/ 下载imagick运行库
+    ```
+
+-   php_redis.dll
+
+    ```text
+    - 类型： http://pecl.php.net/ 下载模块
+    - 作用： 比gd2更好的处理图形操作
+    - 依赖： https://windows.php.net/downloads/pecl/releases/ 下载redis运行库
     ```
 
 ### php 错误提示
