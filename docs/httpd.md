@@ -22,11 +22,9 @@ httpd 配置文件分为 `根配置文件` 和 `自定义配置文件`
 | 数量 | 不限，如：站点虚拟机配置文件 |
 | 依赖 | 依赖 mod_include.so 扩展     |
 
-## 配置文件操作
+httpd 配置文件常用知识点都在这里了，下面开始讲解
 
-httpd 配置文件常用知识点都在这里了！
-
-### 设置变量
+## 设置变量
 
 httpd 配置文件中经常使用路径或端口，我们可以为它们设置变量：
 
@@ -70,7 +68,7 @@ httpd 配置文件中经常使用路径或端口，我们可以为它们设置�
 
 提示：尽量少定义变量，这会增加 httpd 的负荷！
 
-### 增加自定义配置文件
+## 增加自定义配置文件
 
 | 概述                                                  |
 | ----------------------------------------------------- |
@@ -95,7 +93,7 @@ httpd 配置文件中经常使用路径或端口，我们可以为它们设置�
     </IfModule>
     ```
 
-### 清理多余配置项目
+## 清理多余配置项目
 
 httpd 自带的根配置文件有很多注释说明以及多余配置，我们可以将其移除，具体如下：
 
@@ -109,11 +107,9 @@ httpd 自带的根配置文件有很多注释说明以及多余配置，我们�
 | [ssl 配置文件](./source/httpd-ssl.md)     |
 | [虚拟主机配置文件模板](./source/sites.md) |
 
-## 修改配置文件
+下面我们开始讲解 httpd 配置文件中我们可能需要改变的内容
 
-这里讲解是配置文件中我们可能需要改变的内容。
-
-### 加载必要模块
+## 加载必要模块
 
 我们搭建的 wamp 环境额外增加如下插件，这些插件默认不开启，需自己启用，加载模块具体格式：
 
@@ -169,7 +165,7 @@ LoadModule 模块标识符 模块路径
     LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
     ```
 
-### 加载 php 处理模块
+## 加载 php 处理模块
 
 在 wamp 里 php 通常以 httpd 模块的形式被加载，具体加载步骤如下：
 
@@ -193,7 +189,7 @@ LoadModule 模块标识符 模块路径
     </IfModule>
     ```
 
-### httpd 缺省设置
+## httpd 缺省设置
 
 这些值会为稍后在文件中定义的任何虚拟主机容器提供缺省值。
 
@@ -229,8 +225,9 @@ LoadModule 模块标识符 模块路径
 
     ```conf
     <Directory />
-      AllowOverride none
-      Require all denied
+        Options None
+        AllowOverride None
+        Require all denied
     </Directory>
     ```
 
@@ -238,9 +235,9 @@ LoadModule 模块标识符 模块路径
 
     ```conf
     <Directory "${WAMP_ROOT}/base/default">
-       Options FollowSymLinks
-       AllowOverride None
-       Require all granted
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
     </Directory>
     ```
 
@@ -248,7 +245,7 @@ LoadModule 模块标识符 模块路径
 
     ```conf
     <Directory "${HTDOCS}">
-        Options Indexes FollowSymLinks
+        Options FollowSymLinks
         AllowOverride All
         Require all granted
     </Directory>
@@ -265,11 +262,11 @@ LoadModule 模块标识符 模块路径
     Listen ${HTTPS_PORT}
     ```
 
-### 单站点模式
+## 单站点模式
 
 如果服务器只有一个站点的话，不需要加载虚拟主机模块， 使用全局目录作为站点根目录
 
-### 多站点模式
+## 多站点模式
 
 多站点需要加载虚拟主机模块，来创建多个虚拟主机
 
@@ -288,41 +285,84 @@ LoadModule 模块标识符 模块路径
     </VirtualHost>
     ```
 
-    缺省站点作用：
+    缺省站点作用：解析到服务器的域名，如果没有配置虚拟主机，会自动跳转到虚拟主机的缺省站点
 
-    ```text
-    - 解析到服务器的域名，没有配置虚拟主机，自动跳转到虚拟主机缺省站点
-    ```
+## 常用指令说明
 
-2. 站点访问权限
+日程开发掌握这些指令就能完成 95%的工作
 
-    我们可以为每个站点的各种目录设置访问权限，站点总目录权限设置如下：
+### Options
 
-    ```conf
-    <Directory "${HTDOCS}">
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-    ```
+Options 指令控制特定目录中可用的服务器功能，具体属性值如下：
 
-    > 提示：为了便于管理，所有站点我们都会放在一个路径下面，这个路径就是 `站点总目录` 。
+| 属性值                 | 描述                           |
+| ---------------------- | ------------------------------ |
+| None                   | 不会启用任何其他功能           |
+| Indexes                | 允许索引目录列表               |
+| FollowSymLinks         | 允许打开文件，这是默认设置     |
+| ~All~                  | ~除 MultiViews 以外的所有选项~ |
+| ~ExecCGI~              | ~允许执行 CGI 脚本~            |
+| ~Includes~             | ~允许服务器端包含~             |
+| ~IncludesNOEXEC~       | ~允许部分服务器端包含~         |
+| ~MultiViews~           | ~允许多视图~                   |
+| ~SymLinksIfOwnerMatch~ | ~仅允许打开文件~               |
 
-3. `Options` 部分属性值
+开发环境案例：
 
-    | Options 属性值   | 描述               | 服务器建议 |
-    | ---------------- | ------------------ | ---------- |
-    | `Indexes`        | 允许展示目录式列表 | 关闭       |
-    | `FollowSymLinks` | 允许访问 url 链接  | 开启       |
+```conf
+<Directory "${HTDOCS}">
+    Options FollowSymLinks Indexes
+</Directory>
+```
 
-4. `AllowOverride` 部分属性值
+部署环境案例：
 
-    | AllowOverride 属性值 | 描述                      | 考虑与建议           |
-    | -------------------- | ------------------------- | -------------------- |
-    | `None`               | 完全忽略 `.htaccess` 文件 | 更安全，性能消耗降低 |
-    | `All`                | 加载 `.htaccess` 文件     | 更方便，性能消耗增加 |
+```conf
+<Directory "${HTDOCS}">
+    Options FollowSymLinks
+</Directory>
+```
 
-### 默认读取文件
+### AllowOverride
+
+控制站点是否支持 `.htaccess` 文件，主要属性值如下：
+
+| 属性值     | 描述                                 |
+| ---------- | ------------------------------------ |
+| None       | 忽略 `.htaccess` 文件伪指令          |
+| All        | `.htaccess` 允许使用任何支持的伪指令 |
+| AuthConfig | `.htaccess` 允许使用授权指令         |
+| FileInfo   | `.htaccess` 允许使用控制文档类型指令 |
+| Indexes    | `.htaccess` 允许使用控制索引的指令   |
+| Limit      | `.htaccess` 允许使用控制访问的指令   |
+
+开发环境案例：
+
+```conf
+<Directory "${HTDOCS}">
+    AllowOverride All
+</Directory>
+```
+
+部署环境案例：
+
+```conf
+<Directory "${HTDOCS}">
+    AllowOverride None
+</Directory>
+```
+
+### Require
+
+Require 含容器和指令两块内容，具体内容我们放到授权里详细讲解
+
+## 授权
+
+### 授权容器
+
+### 授权语句
+
+## 默认读取文件
 
 `mod_dir.so` 模块允许通过 `DirectoryIndex` 参数设置默认文件，具体设置如下：
 
@@ -334,7 +374,7 @@ DirectoryIndex index.html index.htm index.php
 
 > 提示：配置多个默认文件，会从左往右索引文件，直到找到为止。无法找到页面将无法显示或输出文件列表
 
-### 阻止客户端查看特殊文件
+## 阻止客户端查看特殊文件
 
 httpd 可以让某些固定格式的文件不被浏览者访问，如：会禁用 `.htaccess` 和 `.htpasswd` 文件被 Web 客户端查看
 
@@ -344,7 +384,7 @@ Require all denied
 </Files>
 ```
 
-### 其他设置
+## 其他设置
 
 1. 这 3 组都是默认已经配置的，如果没有特别需要，可以直接移除掉了：
 
