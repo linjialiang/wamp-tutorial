@@ -237,7 +237,10 @@ LoadModule 模块标识符 模块路径
     <Directory "${WAMP_ROOT}/base/default">
         Options FollowSymLinks
         AllowOverride None
-        Require all granted
+        DirectoryIndex index.php
+        <RequireAll>
+            Require local
+        </RequireAll>
     </Directory>
     ```
 
@@ -534,3 +537,59 @@ httpd 可以让某些固定格式的文件不被浏览者访问，如：会禁�
         AddType application/x-httpd-php .php .py .asp .jsp
     </IfModule>
     ```
+
+## 设置别名
+
+别名的作用，是让所有虚拟主机上在访问某个地址时，访问的都是同一个目录，用于通用的内容再合适不过
+
+```conf
+Alias /pma ${WAMP_ROOT}/base/default/pma
+Alias /phpmyadmin ${WAMP_ROOT}/base/default/pma
+Alias /adminer ${WAMP_ROOT}/base/default/adminer.php
+Alias /phpinfo ${WAMP_ROOT}/base/default/phpinfo.php
+<Directory ${WAMP_ROOT}/base/default/pma/libraries>
+    Require all denied
+</Directory>
+<Directory ${WAMP_ROOT}/base/default/pma/setup/lib>
+    Require all denied
+</Directory>
+```
+
+## 文件压缩传输
+
+文件压缩传输配合缓存案例如下：
+
+```conf
+<IfModule deflate_module>
+    SetOutputFilter DEFLATE
+
+    SetEnvIfNoCase Request_URI .(?:gif|jpe?g|png)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI .(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI .(?:pdf|mov|avi|mp3|mp4|rm)$ no-gzip dont-vary
+
+    # 仅满足条件的文件开启压缩传输
+    <IfModule filter_module>
+        AddOutputFilterByType DEFLATE text/html text/css
+        AddOutputFilterByType DEFLATE application/javascript application/x-httpd-php
+    </IfModule>
+
+    # 压缩文件缓存处理
+    <IfModule headers_module>
+        RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+        RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+        RewriteRule "^(.*)\.(css|js|htm|html|php)"         "$1\.$2\.gz" [QSA]
+
+        RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
+        RewriteRule "\.htm\.gz$" "-" [T=text/html,E=no-gzip:1]
+        RewriteRule "\.html\.gz$" "-" [T=text/html,E=no-gzip:1]
+        RewriteRule "\.js\.gz$"  "-" [T=application/javascript,E=no-gzip:1]
+        RewriteRule "\.php\.gz$" "-" [T=application/x-httpd-php,E=no-gzip:1]
+
+        # 这类文件直接开启gzip响应头
+        <FilesMatch "(\.js\.gz|\.css\.gz|\.htm\.gz|\.html\.gz|\.php\.gz)$">
+          Header append Content-Encoding gzip
+          Header append Vary Accept-Encoding
+        </FilesMatch>
+    </IfModule>
+</IfModule>
+```
