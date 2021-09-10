@@ -499,17 +499,21 @@ mod_dir 模块使用 DirectoryIndex 参数控制浏览器访问默认文件，�
 
 httpd 可以让某些固定格式的文件不被浏览者访问，如：会禁用 `.htaccess` 和 `.htpasswd` 文件被 Web 客户端查看
 
-```conf
-# 只支持简单的文件匹配
-<Files ".ht*">
-    Require all denied
-</Files>
+1. Files 支持简单的文件匹配
 
-# 支持正则匹配
-<FilesMatch ".+\.(gif|jpe?g|png)$">
-    Require all denied
-</FilesMatch>
-```
+    ```conf
+    <Files ".ht*">
+        Require all denied
+    </Files>
+    ```
+
+2. FilesMatch 支持正则匹配
+
+    ```conf
+    <FilesMatch ".+\.(gif|jpe?g|png)$">
+        Require all denied
+    </FilesMatch>
+    ```
 
 ## 关联 php 文件的扩展名
 
