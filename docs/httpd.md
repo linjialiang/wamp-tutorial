@@ -483,83 +483,50 @@ Require forward-dns dynamic.example.org
 
 ## 默认读取文件
 
-`mod_dir.so` 模块允许通过 `DirectoryIndex` 参数设置默认文件，具体设置如下：
+mod_dir 模块使用 DirectoryIndex 参数控制浏览器访问默认文件，具体设置如下：
 
 ```conf
 <IfModule dir_module>
-DirectoryIndex index.html index.htm index.php
+    DirectoryIndex index.html index.php
 </IfModule>
 ```
 
-> 提示：配置多个默认文件，会从左往右索引文件，直到找到为止。无法找到页面将无法显示或输出文件列表
+配置多个默认文件，会从左往右索引文件，直到找到为止
+
+无法找到页面将无法显示或输出目录索引列表
 
 ## 阻止客户端查看特殊文件
 
 httpd 可以让某些固定格式的文件不被浏览者访问，如：会禁用 `.htaccess` 和 `.htpasswd` 文件被 Web 客户端查看
 
 ```conf
+# 只支持简单的文件匹配
 <Files ".ht*">
-Require all denied
+    Require all denied
 </Files>
+
+# 支持正则匹配
+<FilesMatch ".+\.(gif|jpe?g|png)$">
+    Require all denied
+</FilesMatch>
 ```
 
-## 其他设置
+## 关联 php 文件的扩展名
 
-1. 这 3 组都是默认已经配置的，如果没有特别需要，可以直接移除掉了：
+默认情况下 mime_module 不支持 php 文件，我们需要新增对 php 脚本文件的支持：
 
-    ```conf
-    <IfModule alias_module>
-        ScriptAlias /cgi-bin/ "${SRVROOT}/cgi-bin/"
-    </IfModule>
-
-    <Directory "${SRVROOT}/cgi-bin">
-        AllowOverride None
-        Options None
-        Require all granted
-    </Directory>
-
-    <IfModule headers_module>
-        RequestHeader unset Proxy early
-    </IfModule>
-    ```
-
-2. 关联 php 文件的扩展名
-
-    > 操作：在 `<IfModule mime_module>` 内新增一行 php 相关代码：
+1. 将 .php 格式设为 php 脚本文件，httpd 会自动提交给 php 模块处理
 
     ```conf
     <IfModule mime_module>
-        TypesConfig conf/mime.types
-
-        AddType application/x-compress .Z
-        AddType application/x-gzip .gz .tgz
         AddType application/x-httpd-php .php
     </IfModule>
     ```
 
-    > 格式： `AddType application/x-httpd-php .扩展名1 [.扩展名2 ...]`
-
-3. 这 2 组不需要特别修改
+2. 将 .php .py .asp .jsp 格式都设为 php 脚本文件，这些格式都会自动提交给 php 模块处理
 
     ```conf
-    <IfModule proxy_html_module>
-        Include conf/extra/proxy-html.conf
-    </IfModule>
-
-    <IfModule ssl_module>
-        SSLRandomSeed startup builtin
-        SSLRandomSeed connect builtin
+    <IfModule mime_module>
+        AddType application/x-httpd-php .php .py .asp .jsp
     </IfModule>
     ```
-
-4. 指定站点配置文件存放目录
-
-    站点配置文件就是 httpd 的自定义配置文件，只需通过 `Include` 参数加载即可：
-
-    ```conf
-    <IfModule include_module>
-        Include "${WAMP_ROOT}/web/sites/*.conf"
-    </IfModule>
-    ```
-
-    > 提示：Include 支持简单的正则表达式，sites 目录下所有 `.conf` 文件都会被加载！
