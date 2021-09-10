@@ -572,25 +572,27 @@ Alias /phpinfo ${WAMP_ROOT}/base/default/phpinfo.php
         AddOutputFilterByType DEFLATE text/html text/css
         AddOutputFilterByType DEFLATE application/javascript application/x-httpd-php
     </IfModule>
+</IfModule>
 
-    # 压缩文件缓存处理
-    <IfModule headers_module>
-        RewriteCond "%{HTTP:Accept-encoding}" "gzip"
-        RewriteCond "%{REQUEST_FILENAME}\.gz" -s
-        RewriteRule "^(.*)\.(css|js|htm|html|php)"         "$1\.$2\.gz" [QSA]
+<IfModule headers_module>
+    RequestHeader unset Proxy early
 
-        RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
-        RewriteRule "\.htm\.gz$" "-" [T=text/html,E=no-gzip:1]
-        RewriteRule "\.html\.gz$" "-" [T=text/html,E=no-gzip:1]
-        RewriteRule "\.js\.gz$"  "-" [T=application/javascript,E=no-gzip:1]
-        RewriteRule "\.php\.gz$" "-" [T=application/x-httpd-php,E=no-gzip:1]
+    # ====== start 压缩文件缓存处理
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+    RewriteRule "^(.*)\.(css|js|htm|html|php)"         "$1\.$2\.gz" [QSA]
 
-        # 这类文件直接开启gzip响应头
-        <FilesMatch "(\.js\.gz|\.css\.gz|\.htm\.gz|\.html\.gz|\.php\.gz)$">
-          Header append Content-Encoding gzip
-          Header append Vary Accept-Encoding
-        </FilesMatch>
-    </IfModule>
+    RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
+    RewriteRule "\.htm\.gz$" "-" [T=text/html,E=no-gzip:1]
+    RewriteRule "\.html\.gz$" "-" [T=text/html,E=no-gzip:1]
+    RewriteRule "\.js\.gz$"  "-" [T=application/javascript,E=no-gzip:1]
+    RewriteRule "\.php\.gz$" "-" [T=application/x-httpd-php,E=no-gzip:1]
+    # 这类文件直接开启gzip响应头
+    <FilesMatch "(\.js\.gz|\.css\.gz|\.htm\.gz|\.html\.gz|\.php\.gz)$">
+      Header append Content-Encoding gzip
+      Header append Vary Accept-Encoding
+    </FilesMatch>
+    # ====== end 压缩文件缓存处理
 </IfModule>
 ```
 
