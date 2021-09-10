@@ -22,7 +22,7 @@ LoadModule php_module ${WAMP_ROOT}/base/php/php8apache2_4.dll
 </IfModule>
 
 ServerName localhost
-ServerAdmin qywl@y746.com
+ServerAdmin linjialiang@y746.com
 
 <Directory />
     AllowOverride none
@@ -43,9 +43,8 @@ ServerAdmin qywl@y746.com
     Require all denied
 </Files>
 
-ErrorLog "|${SRVROOT}/bin/rotatelogs.exe -t ${HTLOGS}/error/error_log.%Y-%m-%d-%H_%M_%S 5M 480"
-
 LogLevel crit
+ErrorLog "|${SRVROOT}/bin/rotatelogs.exe -t ${HTLOGS}/error/error_log.%Y-%m-%d-%H_%M_%S 5M 480"
 
 <IfModule log_config_module>
     LogFormat "$V-%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
@@ -108,10 +107,6 @@ DocumentRoot "${WAMP_ROOT}/base/default"
     Include "${WAMP_ROOT}/web/sites/*.conf"
 </IfModule>
 
-<IfModule headers_module>
-    RequestHeader unset Proxy early
-</IfModule>
-
 <IfModule deflate_module>
     SetOutputFilter DEFLATE
 
@@ -123,22 +118,24 @@ DocumentRoot "${WAMP_ROOT}/base/default"
         AddOutputFilterByType DEFLATE text/html text/css
         AddOutputFilterByType DEFLATE application/javascript application/x-httpd-php
     </IfModule>
+</IfModule>
 
-    <IfModule headers_module>
-        RewriteCond "%{HTTP:Accept-encoding}" "gzip"
-        RewriteCond "%{REQUEST_FILENAME}\.gz" -s
-        RewriteRule "^(.*)\.(css|js|htm|html|php)"         "$1\.$2\.gz" [QSA]
+<IfModule headers_module>
+    RequestHeader unset Proxy early
 
-        RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
-        RewriteRule "\.htm\.gz$" "-" [T=text/html,E=no-gzip:1]
-        RewriteRule "\.html\.gz$" "-" [T=text/html,E=no-gzip:1]
-        RewriteRule "\.js\.gz$"  "-" [T=application/javascript,E=no-gzip:1]
-        RewriteRule "\.php\.gz$" "-" [T=application/x-httpd-php,E=no-gzip:1]
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+    RewriteRule "^(.*)\.(css|js|htm|html|php)"         "$1\.$2\.gz" [QSA]
 
-        <FilesMatch "(\.js\.gz|\.css\.gz|\.htm\.gz|\.html\.gz|\.php\.gz)$">
-          Header append Content-Encoding gzip
-          Header append Vary Accept-Encoding
-        </FilesMatch>
-    </IfModule>
+    RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
+    RewriteRule "\.htm\.gz$" "-" [T=text/html,E=no-gzip:1]
+    RewriteRule "\.html\.gz$" "-" [T=text/html,E=no-gzip:1]
+    RewriteRule "\.js\.gz$"  "-" [T=application/javascript,E=no-gzip:1]
+    RewriteRule "\.php\.gz$" "-" [T=application/x-httpd-php,E=no-gzip:1]
+
+    <FilesMatch "(\.js\.gz|\.css\.gz|\.htm\.gz|\.html\.gz|\.php\.gz)$">
+      Header append Content-Encoding gzip
+      Header append Vary Accept-Encoding
+    </FilesMatch>
 </IfModule>
 ```

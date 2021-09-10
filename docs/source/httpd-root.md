@@ -12,7 +12,6 @@ Define SRVROOT "${WAMP_ROOT}/base/httpd"
 Define HTDOCS "${WAMP_ROOT}/web/www"
 Define HTLOGS "${WAMP_ROOT}/web/logs/httpd"
 Define HTTP_PORT "80"
-Define HTTPS_PORT "443"
 
 ServerRoot "${SRVROOT}"
 

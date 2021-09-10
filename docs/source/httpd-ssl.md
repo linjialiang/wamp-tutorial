@@ -7,16 +7,17 @@ ssl 配置文件是 httpd 自带的，路径可改，内容可变
 ## 参考配置:
 
 ```conf
+Define HTTPS_PORT "443"
+
+Listen ${HTTPS_PORT}
+
 LoadModule ssl_module modules/mod_ssl.so
 LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
-Define HTTPS_PORT "443"
 
 <IfModule ssl_module>
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
 </IfModule>
-
-Listen ${HTTPS_PORT}
 
 SSLCipherSuite HIGH:MEDIUM:!MD5:!RC4:!3DES
 SSLProxyCipherSuite HIGH:MEDIUM:!MD5:!RC4:!3DES
