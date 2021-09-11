@@ -101,7 +101,7 @@ wamp 一共使用的 4 个 bat 脚本文件，用户管理 wamp 的各项工作�
 
 | 脚本类型 | 文件名                                           |
 | -------- | ------------------------------------------------ |
-| 安装脚本 | [install.bat](./soucre/install.bat.md)           |
-| 卸载脚本 | [uninstall.bat](./soucre/uninstall.bat.md)       |
-| 强制卸载 | [force-delete.bat](./soucre/force-delete.bat.md) |
-| 管理操作 | [menu.bat](./soucre/menu.bat.md)                 |
+| 安装脚本 | [install.bat](./source/install.bat.md)           |
+| 卸载脚本 | [uninstall.bat](./source/uninstall.bat.md)       |
+| 强制卸载 | [force-delete.bat](./source/force-delete.bat.md) |
+| 管理操作 | [menu.bat](./source/menu.bat.md)                 |
