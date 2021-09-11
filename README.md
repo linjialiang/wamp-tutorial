@@ -88,7 +88,7 @@ WAMP 开发环境目录
 
 | 章节                           |
 | ------------------------------ |
-| [httpd 操作篇](./doc/httpd.md)     |
-| [php 操作篇](./doc/php.md)         |
-| [maraidb 操作篇](./doc/maraidb.md) |
-| [wamp 管理篇](./doc/wamp.md)       |
+| [httpd 操作篇](./docs/httpd.md)     |
+| [php 操作篇](./docs/php.md)         |
+| [maraidb 操作篇](./docs/maraidb.md) |
+| [wamp 管理篇](./docs/wamp.md)       |
