@@ -80,7 +80,7 @@ Win 系统服务项的启动类型分为如下 3 种：
 -   将 C:\wamp\base\php 加入用户环境变量 PATH
 -   将 C:\wamp\base\httpd\bin 加入用户环境变量 PATH
 -   将 C:\wamp\base\mariadb\bin 加入用户环境变量 PATH
--   将 C:\wamp\base\ImageMagick\bin 加入**系统环境变量** PATH
+-   ~~将 C:\wamp\base\ImageMagick\bin 加入**系统环境变量** PATH~~
 -   http://localhost/adminer 进入 adminer
 -   http://localhost/pma 进入 phpMyAdmin
 -   MariaDB 的 root@localhost 默认密码为 123456

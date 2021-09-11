@@ -426,25 +426,37 @@ windows 安装 composer 简易说明：
     > composer clear
     ```
 
-7. 更新 composer.lock 文件的源地址
+7. 更新项目
+
+    ```cmd
+    > composer update
+    ```
+
+8. 更新项目指定包
+
+    ```cmd
+    > composer update packageName
+    ```
+
+9. 更新项目 composer.lock 文件的源地址
 
     ```cmd
     > composer update --lock
     ```
 
-8. 执行诊断命令：
+10. 执行诊断命令：
 
     ```cmd
     > composer diagnose
     ```
 
-9. 调试
+11. 调试
 
     ```cmd
     > composer -vvv require alibabacloud/sdk
     ```
 
-10. 更新 Composer 版本
+12. 更新 Composer 版本
 
     ```cmd
     > composer self-update

@@ -10,7 +10,7 @@
 
 | 百度网盘地址                                                      | 密码 |
 | ----------------------------------------------------------------- | ---- |
-| [wamp-v6.6.4.7z](https://pan.baidu.com/s/1Tk0Aa4BVdjc5YkP-FEDTeA) | r1yd |
+| [wamp-v6.6.8.7z](https://pan.baidu.com/s/1Tk0Aa4BVdjc5YkP-FEDTeA) | r1yd |
 
 ## 包列表
 
