@@ -264,3 +264,73 @@ MariaDB 数据库如果使用 InnoDB 索引，在转移时，建议以 sql 导�
 | phpMyAdmin         |
 | adminer            |
 | navcat             |
+
+## 安裝 MariaDB 管理工具
+
+MariaDB 有 2 个非常有名的 web 端管理工具
+
+| DB 管理系统 | 网址                        |
+| ----------- | --------------------------- |
+| adminer     | https://www.adminer.org/    |
+| phpmyadmin  | https://www.phpmyadmin.net/ |
+
+附录： [phpMyAdmin 中文文档](https://docs.phpmyadmin.net/zh_CN/latest/)
+
+## 配置 MariaDB 管理工具
+
+MariaDB 管理工具在 httpd 里的配置请查阅 [httpd 操作篇](./httpd.md)
+
+### 配置 phpmyadmin
+
+phpMyAdmin 是 MySQL/MariaDB 最著名的管理系统，由 PHP 语言编写。
+
+phpMyAdmin 可以使用 composer 管理安装，我们是直接从官网下载
+
+解压后需要对 phpmyadmin 做一些简单的配置，具体如下：
+
+1. config.default.php
+
+    libraries/config.default.php 是 phpmyadmin 的自带的配置文件，
+
+    如果项目根目录下没有 config.inc.php 默认此文件为配置文件
+
+2. config.inc.php
+
+    在 pma 根目录下新建 config.inc.php 文件，具体内容如下：
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    $cfg['blowfish_secret'] = 'VPLjNXjLGt2TvXacmukPVJNNAdNJYrvyVWy2NBtUx8v3mvExnXJFxvDnQx2BRQ5ddbSGv2DPxwerWsmg';
+    $i = 0;
+    $i++;
+
+    $cfg['Servers'][$i]['auth_type'] = 'cookie';
+    $cfg['Servers'][$i]['host'] = 'localhost';
+    $cfg['Servers'][$i]['compress'] = false;
+    $cfg['Servers'][$i]['AllowNoPassword'] = false;
+
+    $cfg['UploadDir'] = '';
+    $cfg['SaveDir'] = '';
+
+    $cfg['DefaultLang'] = 'zh_CN';
+    $cfg['ThemeDefault'] = 'original';
+    ```
+
+3. $cfg['blowfish_secret'] 参数说明
+
+    $cfg['blowfish_secret'] 参数是随机字符串，支持如下字符：
+
+    | 类型 | 内容                           |
+    | ---- | ------------------------------ |
+    | 数值 | 0-9                            |
+    | 大写 | A-Z                            |
+    | 小写 | a-z                            |
+    | 特殊 | \_`~!@#$%^&\*()-=+\|'";:.,<>/? |
+
+### 配置 adminer
+
+adminer 是 PHP 语言编写，支持多种数据库系统，由于其出色的执行速度使得其大受程序员欢迎！
+
+adminer 不需要任何配置
