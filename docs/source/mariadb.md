@@ -73,6 +73,8 @@ my.ini 优先级具体如下：
     - 如果该文件不存在，系统将报错
     ```
 
+可以 [点击查看](./source/my.ini.md) my.ini 参考案例
+
 ## 初始化数据
 
 MariaDB 默认没有 data 数据目录，需要我们自己进行初始化，这里我们推荐使用 mysql_install_db.exe 来管理

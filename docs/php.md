@@ -9,7 +9,7 @@ php 根目录下有 2 个配置文件模板，我们复制其中 1 个并重命�
 -   开发环境示例模板： php.ini-development
 -   部署环境示例模板： php.ini-production
 
-WAMP 通常是开发环境，我们这里参考的是 php.ini-development，点击[查看完整案例](./source/php.md)
+WAMP 通常是开发环境，我们这里参考的是 php.ini-development，点击[查看完整案例](./source/php.ini.md)
 
 ## 绑定到 httpd
 
