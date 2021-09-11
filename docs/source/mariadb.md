@@ -118,8 +118,6 @@ mysql_install_db.exe 会自动生成系统服务，如果只想生成 data 数�
 
     安装服务上增加的是： "--defaults-file=C:\wamp\web\data\my.ini"
 
-### 必备文件
-
 ### 可移除文件
 
 data 目录下移除文件列表如下：
@@ -139,3 +137,128 @@ data 目录下移除文件列表如下：
     如果不是 --defaults-file 指定配置文件，可以移除
 
     新版本：是 --defaults-file 指定文件，不可移除
+
+### 必备文件
+
+data 目录下移除文件列表如下：
+
+-   子目录 mysql
+    MariaDB 自带库
+    专门用于管理 MariaDB 的数据库
+
+-   子目录 performance_schema
+    MariaDB 自带库
+    用于收集数据库服务器性能参数
+
+-   子目录 sys
+    MariaDB 自带库
+
+-   aria_log.%
+    Aria 存储引擎的日志文件
+
+-   aria_log_control
+    Aria 存储引擎的日志控制文件
+
+-   ib_logfile1/ib_logfile2
+    InnoDB 的 重做日志文件
+
+    ```text
+    - 重做日志文件其实就是 innodb 存储引擎产生的日志，默认在 innodb_data_home_dir 下面有两个文件 ib_logfile0 和 ib_logfile1
+    - 原理: innodb 存储引擎，先将操作写入 重做日志文件 中，再进行数据库操作。
+    - 作用: 当发生故障 innodb 存储引擎就会使用 重做日志文件 进行恢复，保证数据库的完整性
+    ```
+
+-   ib_buffer_pool
+    InnoDB 存取内存热数据的文件
+
+    ```text
+    - 关闭 MariaDB 时: 把内存中的热数据保存在 ib_buffer_pool 文件中
+    - 启动 MariaDB 后: ib_buffer_pool 文件内容自动加载到 Buffer_Pool 缓冲池里
+    ```
+
+-   ibdata1
+    InnoDB 的共享表空间
+
+    ```text
+    - ibdata1 文件是 innodb 的共享表空间文件，一般存储下表数据：
+        - 数据字典（也就是 InnoDB 表的元数据）
+        - 变更缓冲区
+        - 双写缓冲区
+        - 撤销日志
+        - 所有使用 InnoDB 引擎的数据库的表数据（开启独立表空间后，不再存储）
+    ```
+
+    查看是否开启独立表空间指令
+
+    ```cmd
+    mysql > show variables like 'innodb_file_per_table';
+    ```
+
+-   multi-master.info
+    多源复制相关文件，包含所有正在使用的主连接
+
+-   bin-log%
+    二进制日志文件（自动生成）
+
+-   bin-log.index
+    二进制日志文件索引（自动生成）
+
+-   multi-master.info
+    多源复制相关文件，包含所有正在使用的主连接
+
+### 存储引擎
+
+MariaDB 有 2 个重要的存储引擎
+
+1. innodb
+   MariaDB 默认存储引擎
+
+2. Aria
+   MariaDB 强制启动的存储引擎，用于替代 MySQL 的 MyISAM 存储引擎
+
+查询 MariaDB 所有存储引擎：
+
+```cmd
+mysql > show engines;
+```
+
+## 指定 pid 文件
+
+1. pid 可以在 my.ini 单独指定：
+
+    ```ini
+    [mysqld]
+    pid-file    = c:/wamp/base/conf/mariadb.pid
+    ```
+
+    默认情况下: pid 文件会在 data 目录自动生成
+
+### 注意事项
+
+-   确保 c:/wamp/base/conf/目录存在
+
+    ```text
+    - 由于权限的问题，mariadb不能新建目录
+    - 确保目录存在，启动 MariaDB 时，就会自动生成 mariadb.pid 文件
+    ```
+
+-   客户端不存在 pid-file 参数
+
+    ```text
+    - MariaDB 客户端不存在 pid-file 这个参数
+    - [client]、[client-mariadb]、[client-server] 这些客户端选项组下不应该出现 pid-file 选项
+    - 如果客户端选项组出现 pid-file 会出现一些问题
+    ```
+
+## 数据库转移
+
+MariaDB 数据库如果使用 InnoDB 索引，在转移时，建议以 sql 导出
+
+-   原因：数据库的索引信息统一存在在 InnoDB 里，如果直接拷贝 InnoDB 数据量太大
+-   正确方式：建议使用数据库管理工具，将需要的数据库导出为 sql 文件，再用相同的数据库管理工具导入 sql 文件
+
+| 数据库管理工具推荐 |
+| ------------------ |
+| phpMyAdmin         |
+| adminer            |
+| navcat             |
