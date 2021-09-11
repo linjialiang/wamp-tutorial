@@ -72,3 +72,70 @@ my.ini 优先级具体如下：
     - 优先级：4
     - 如果该文件不存在，系统将报错
     ```
+
+## 初始化数据
+
+MariaDB 默认没有 data 数据目录，需要我们自己进行初始化，这里我们推荐使用 mysql_install_db.exe 来管理
+
+mysql_install_db.exe 会自动生成系统服务，如果只想生成 data 数据，可以使用 mysqld 相关指令
+
+### 入门级操作
+
+初学者不想使用指令，可以如下操作
+
+| 步骤 | 具体操作                                    |
+| ---- | ------------------------------------------- |
+| 1    | 双击 mysql_install_db.exe 生成 datadir 目录 |
+| 2    | 默认路径：c:\wamp\base\mariadb\data         |
+
+### 通用初始化操作
+
+可以将 c:\wamp\base\mariadb\bin 加入环境变量中，在任意目录下执行
+
+也可以先 进入 c:\wamp\base\mariadb\bin 目录下，在执行
+
+-   不指定配置文件
+
+    指定 data 目录、初始密码
+
+    ```cmd
+    > cd c:\wamp\base\mariadb\bin
+    > mysql_install_db.exe --datadir=c:/wamp/web/data --password=123456
+    ```
+
+-   指定配置文件
+
+    指定 data 目录、初始密码、加载预先写好的配置文件信息、设置服务名称
+
+    ```cmd
+    > cd c:\wamp\base\mariadb\bin
+    > mysql_install_db.exe --datadir=c:/wamp/web/data --password=123456 --config=c:/wamp/base/mariadb/my.ini --service=mariadb
+    ```
+
+-   --config 指令
+
+    该指令是拷贝指定配置文件到 data 目录下，即：
+
+    安装服务上增加的是： "--defaults-file=C:\wamp\web\data\my.ini"
+
+### 必备文件
+
+### 可移除文件
+
+data 目录下移除文件列表如下：
+
+-   ${hostname}.err
+
+    错误日志，由 my.ini 重新指定
+
+-   test 目录
+
+    一个测试用的数据库，部署环境建议移除掉
+
+    新版本：初始化时已经不存在
+
+-   my.ini
+
+    如果不是 --defaults-file 指定配置文件，可以移除
+
+    新版本：是 --defaults-file 指定文件，不可移除
