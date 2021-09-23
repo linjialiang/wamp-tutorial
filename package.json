@@ -1,0 +1,32 @@
+{
+  "name": "wamp-tutorial",
+  "version": "1.0.0",
+  "description": "wamp 教程",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "chapter": "loppo chapter",
+    "server": "loppo server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitee.com/linjialiang/wamp-tutorial.git"
+  },
+  "keywords": [
+    "wamp",
+    "tutorial"
+  ],
+  "author": "linjialiang",
+  "license": "CC-BY-SA-4.0",
+  "bugs": {
+    "url": "https://gitee.com/linjialiang/wamp-tutorial/issues"
+  },
+  "homepage": "https://gitee.com/linjialiang/wamp-tutorial#readme",
+  "dependencies": {
+    "gh-pages": "^3.2.3",
+    "emad-loppo": "latest",
+    "emad-loppo-theme-wangdoc": "latest"
+  }
+}
